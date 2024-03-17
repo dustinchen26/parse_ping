@@ -1,0 +1,155 @@
+<!-- 
+  Copyright © [2023] [Dustin_Chen]. All rights reserved.
+  Author: Dustin_Chen
+  Email:  Dustin_Chen@compal.com or chuhpsdustin@gmail.com
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ping_draw</title>
+<!-- 引入 Plotly.js 庫 -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<style>
+  /* 設置整個頁面的 Flex 佈局 */
+  body {
+      font-family: 'Roboto', sans-serif;
+      line-height: 1;
+      font-size: 14px;  
+  
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 100vh;
+    margin: 0;
+    padding: 10px; /* 添加一些內邊距，使佈局更好看 */
+    padding-left: 20px; /* 添加左邊距 */  
+  }
+
+  /* 設置輸入框和按鈕的樣式 */
+  #input-container {
+    margin-bottom: 20px;
+  }
+
+  /* 設置文本區域的大小 */
+  #pingData {
+    width: 670px; /* 設置寬度 */
+    height: 150px; /* 設置高度 */
+  }
+  
+  /* 設置圖表容器的寬度和高度 */
+  #chart-container {
+    width: 800px;
+    height: 600px;
+  }
+
+  /* 設置額外輸出的樣式 */
+  #output-container {
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+  <h2>Ping_draw</h2>
+  <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com"
+      style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com"
+      style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
+
+  
+<!-- 輸入框和按鈕放在上方 -->
+<div id="input-container">
+  <textarea id="pingData" rows="10" cols="50" placeholder="在這裡粘貼Ping資料..."></textarea><br>
+  <button onclick="visualizeData()">生成圖表</button>
+</div>
+<!-- 圖表放在下方 -->
+<div id="chart-container"></div>
+<!-- 額外輸出放在下方 -->
+<div id="output-container">
+  <p id="output-text"></p>
+</div>
+
+<script>
+// 從文本中提取時間和ping delay資料
+function extractData(text) {
+  const lines = text.split('\n');
+  const dates = [];
+  const delays = [];
+  lines.forEach(line => {
+    const dateMatch = line.match(/^(\w{3}\s\w{3}\s\d{2}\s\d{2}:\d{2}:\d{2}\s\w{3}\s\d{4}):/);
+    const delayMatch = line.match(/time=(\d+\.\d+)\sms$/);
+    if (dateMatch && delayMatch) {
+      // 修改這裡的規則運算式以提取時間數位部分
+      const time = dateMatch[1].match(/\d{2}:\d{2}:\d{2}/)[0];
+      dates.push(time);
+      delays.push(parseFloat(delayMatch[1]));
+    }
+  });
+  return { dates, delays };
+}
+
+// 計算最小值、最大值和平均值
+function calculateStats(delays) {
+  const min = Math.min(...delays);
+  const max = Math.max(...delays);
+  const sum = delays.reduce((acc, curr) => acc + curr, 0);
+  const avg = sum / delays.length;
+  return { min, max, avg };
+}
+
+// 主函數
+function visualizeData() {
+  const text = document.getElementById('pingData').value;
+  const { dates, delays } = extractData(text);
+
+  const { min, max, avg } = calculateStats(delays);
+
+  const trace = {
+    x: dates,
+    y: delays,
+    mode: 'lines',
+    name: 'Ping Delay'
+  };
+
+  const minTrace = {
+    x: dates,
+    y: Array(dates.length).fill(min),
+    mode: 'lines',
+    name: 'Min'
+  };
+
+  const maxTrace = {
+    x: dates,
+    y: Array(dates.length).fill(max),
+    mode: 'lines',
+    name: 'Max'
+  };
+
+  const avgTrace = {
+    x: dates,
+    y: Array(dates.length).fill(avg),
+    mode: 'lines',
+    name: 'Average'
+  };
+
+  const layout = {
+    title: 'Ping Delay 時間曲線圖',
+    xaxis: { title: '時間' },
+    yaxis: { title: 'Ping Delay (ms)' }
+  };
+
+  const data = [trace, minTrace, maxTrace, avgTrace];
+
+  Plotly.newPlot('chart-container', data, layout);
+
+  // 更新額外輸出的文本
+  const outputText = `最小值: ${min.toFixed(2)} ms, 平均值: ${avg.toFixed(2)} ms, 最大值: ${max.toFixed(2)} ms`;
+  document.getElementById('output-text').textContent = outputText;
+}
+</script>
+
+</body>
+</html>

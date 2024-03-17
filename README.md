@@ -1,0 +1,26 @@
+# Parse_RSRP_SINR_PUSCH-power
+
+online tool => https://dustinchen26.github.io/parse_ping
+
+## Example
+```
+【Example input】
+root@AtopTechnologies:~# ping 10.205.102.25 -c5 | while read pong; do echo "$(date): $pong"; done
+Sun Mar 17 21:18:10 CST 2024: PING 10.205.102.25 (10.205.102.25): 56 data bytes
+Sun Mar 17 21:18:10 CST 2024: 64 bytes from 10.205.102.25: seq=0 ttl=62 time=12.011 ms
+Sun Mar 17 21:18:11 CST 2024: 64 bytes from 10.205.102.25: seq=1 ttl=62 time=16.722 ms
+Sun Mar 17 21:18:12 CST 2024: 64 bytes from 10.205.102.25: seq=2 ttl=62 time=12.560 ms
+Sun Mar 17 21:18:13 CST 2024: 64 bytes from 10.205.102.25: seq=3 ttl=62 time=14.320 ms
+Sun Mar 17 21:18:14 CST 2024: 64 bytes from 10.205.102.25: seq=4 ttl=62 time=12.136 ms
+Sun Mar 17 21:18:14 CST 2024:
+Sun Mar 17 21:18:14 CST 2024: --- 10.205.102.25 ping statistics ---
+Sun Mar 17 21:18:14 CST 2024: 5 packets transmitted, 5 packets received, 0% packet loss
+Sun Mar 17 21:18:14 CST 2024: round-trip min/avg/max = 12.011/13.549/16.722 ms
+root@AtopTechnologies:~#
+
+
+【Output】
+Ping Delay 時間曲線圖
+最小值: 10.71 ms, 平均值: 15.34 ms, 最大值: 27.01 ms
+
+```
