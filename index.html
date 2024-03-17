@@ -17,7 +17,7 @@
   /* 設置整個頁面的 Flex 佈局 */
   body {
       font-family: 'Roboto', sans-serif;
-      line-height: 1;
+      line-height: 1.2;
       font-size: 14px;  
   
     display: flex;
@@ -44,13 +44,17 @@
   /* 設置圖表容器的寬度和高度 */
   #chart-container {
     width: 800px;
-    height: 600px;
+    height: 500px;
   }
 
   /* 設置額外輸出的樣式 */
   #output-container {
     margin-top: 20px;
   }
+  
+    .red {
+      color: red;
+    }  
 </style>
 </head>
 <body>
@@ -58,12 +62,17 @@
   <p style="margin: 0;">Author: Dustin_Chen, email: <a href="mailto:Dustin_Chen@compal.com"
       style="line-height: 1;">Dustin_Chen@compal.com</a> or <a href="mailto:chuhpsdustin@gmail.com"
       style="line-height: 1;">chuhpsdustin@gmail.com</a></p>
-
-  
+  <ul>
+    <li><strong>【How to use】</strong>
+      <ul>
+	  	<li> Please use the command below to generate the ping delay data: ex:<br>
+			<span class="red">ping 10.205.102.25 -c5 | while read pong; do echo "$(date): $pong"; done</span>
+		</li>
+		 
 <!-- 輸入框和按鈕放在上方 -->
 <div id="input-container">
-  <textarea id="pingData" rows="10" cols="50" placeholder="在這裡粘貼Ping資料..."></textarea><br>
-  <button onclick="visualizeData()">生成圖表</button>
+  <textarea id="pingData" rows="10" cols="50" placeholder="Please paste the whole ping data here to draw..."></textarea><br>
+  <button onclick="visualizeData()">draw_ping_data</button>
 </div>
 <!-- 圖表放在下方 -->
 <div id="chart-container"></div>
@@ -71,6 +80,11 @@
 <div id="output-container">
   <p id="output-text"></p>
 </div>
+
+      </ul>		
+    </li>
+  </ul>	
+ 
 
 <script>
 // 從文本中提取時間和ping delay資料
